@@ -26,6 +26,38 @@ use lib 't';
 # uncomment this to run the ### lines
 use Devel::Comments;
 
+
+{
+  require Image::Base::Tk::Canvas;
+  my $mw = MainWindow->new;
+  my $image = Image::Base::Tk::Canvas->new
+    (-for_widget => $mw,
+     -width => 50,
+     -height => 20,
+     -file_format => 'xpm');
+
+  $image->rectangle (0,0, 49,19, 'black');
+
+  $image->diamond (1,1,6,6, 'white');
+  $image->diamond (11,1,16,6, 'white', 1);
+  $image->diamond (1,10,7,16, 'white');
+  $image->diamond (11,10,17,16, 'white', 1);
+
+  require Tk::WinPhoto;
+  my $canvas = $image->get('-tkcanvas');
+  $canvas->update;
+  my $photo = $canvas->Photo (-format => 'window',
+                              -data => oct($canvas->id));
+  require Image::Base::Tk::Photo;
+  my $pimage = Image::Base::Tk::Photo->new
+    (-tkphoto => $photo,
+     -width => 50,
+     -height => 20);
+  $photo->write ('/dev/stdout', -format => 'xpm');
+  exit 0;
+}
+
+
 {
   my $mw = MainWindow->new;
   $mw->mwmDecorations (-title => 0,

@@ -31,7 +31,7 @@ use strict;
 use Carp;
 
 use vars '$VERSION', '@ISA';
-$VERSION = 1;
+$VERSION = 2;
 
 use Image::Base;
 @ISA = ('Image::Base');
@@ -241,7 +241,7 @@ sub line {
 1;
 __END__
 
-=for stopwords PNG filename Ryde Imager JPEG PNM GIF BMP png jpeg
+=for stopwords Image-Base-Tk filename Ryde PNG JPEG PNM GIF BMP XPM XBM png jpeg MainWindow Xlib toplevel builtin
 
 =head1 NAME
 

@@ -136,7 +136,7 @@ sub my_bounding_box_and_sides {
 # VERSION
 
 {
-  my $want_version = 1;
+  my $want_version = 2;
   is ($Image::Base::Tk::Photo::VERSION, $want_version, 'VERSION variable');
   is (Image::Base::Tk::Photo->VERSION,  $want_version, 'VERSION class method');
 

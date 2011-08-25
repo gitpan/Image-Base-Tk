@@ -10,6 +10,7 @@ debian/watch
 devel/tk-canvas-eps.pl
 devel/tk-canvas-fig.pl
 devel/tk-canvas.pl
+devel/tk-photo-leak.pl
 devel/tk-photo.pl
 devel/tk-winphoto.pl
 inc/my_pod2html

@@ -17,11 +17,80 @@
 # You should have received a copy of the GNU General Public License along
 # with Image-Base-Tk.  If not, see <http://www.gnu.org/licenses/>.
 
+use 5.004;
 use strict;
 use Tk;
 
 # uncomment this to run the ### lines
 use Devel::Comments;
+
+
+
+{
+  require Image::Base::Tk::Photo;
+  my $mw = MainWindow->new;
+  my $image = Image::Base::Tk::Photo->new
+    (-for_widget => $mw,
+     -width => 50,
+     -height => 20,
+     -file_format => 'xpm');
+
+  $image->rectangle (0,0, 49,19, 'black');
+
+  $image->ellipse (1,1,6,6, 'white');
+  $image->ellipse (11,1,16,6, 'white', 1);
+  $image->ellipse (1,10,7,16, 'white');
+  $image->ellipse (11,10,17,16, 'white', 1);
+
+  $image->save('/dev/stdout');
+  exit 0;
+}
+
+
+{
+  # loading PNG
+  my $mw = MainWindow->new;
+  require Tk::PNG;
+  # my $photo = $mw->Photo (-file => '/etc/motd');
+  my $photo = $mw->Photo (-file => '/usr/share/emacs/23.3/etc/images/gnus/gnus.png');
+  # require Tk::JPEG;
+  # require Tk::TIFF;
+  # #$photo->data(-format => 'JPEG');
+  # $photo->data(-format => 'TIFF');
+  # $photo->data(-format => 'PNG');
+  exit 0;
+}
+
+{
+  my $mw = MainWindow->new;
+  my $photo = $mw->Photo (-width => 4, -height => 4);
+  my @imagenames = $mw->imageNames;
+  # my @imagenames = $photo->image('names');
+  ### @imagenames
+  {
+    require Package::Stash;
+    my $stash = Package::Stash->new('Tk::Widget');
+    ### syms: $stash->list_all_symbols
+  }
+  {
+    require Package::Stash;
+    my $stash = Package::Stash->new('Tk::Image');
+    ### syms: $stash->list_all_symbols
+  }
+
+  foreach my $image (@imagenames) {
+    ### $image
+    my $inuse = $image->image('inuse');
+    ### $inuse
+
+    # $image->image('inuse');
+    # $mw->image('inuse',$image);
+    # 
+    # $image->inuse($image);
+    # my $inuse = $mw->imageInuse($image);
+  }
+  exit 0;
+}
 
 {
   my $mw = MainWindow->new;
@@ -49,19 +118,6 @@ use Devel::Comments;
   exit 0;
 }
 
-{
-  # loading PNG
-  my $mw = MainWindow->new;
-  #  require Tk::PNG;
-  my $photo = $mw->Photo (-file => '/etc/motd');
-  #my $photo = $mw->Photo (-file => '/usr/share/emacs/23.3/etc/images/gnus/gnus.png');
-  # require Tk::JPEG;
-  # require Tk::TIFF;
-  # #$photo->data(-format => 'JPEG');
-  # $photo->data(-format => 'TIFF');
-  # $photo->data(-format => 'PNG');
-  exit 0;
-}
 
 {
   # saving PNG
@@ -159,9 +215,6 @@ $mw->Button(-text => "Done", -command => sub { exit })->pack;
   my @imagetypes = $mw->imageTypes;
   ### @imagetypes
 }
-{
-  my @imagenames = $mw->imageNames;
-  ### @imagenames
-}
+
 
 MainLoop;

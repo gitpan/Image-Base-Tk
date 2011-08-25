@@ -30,7 +30,7 @@ use vars '$VERSION', '@ISA';
 use Image::Base;
 @ISA = ('Image::Base');
 
-$VERSION = 1;
+$VERSION = 2;
 
 # uncomment this to run the ### lines
 #use Devel::Comments '###';
@@ -161,7 +161,7 @@ my %anchor_is_xcentre = (n => 1, centre => 1, s => 1);
 my %anchor_is_xright = (ne => 1, e => 1, se => 1);
 my %anchor_is_ycentre = (w => 1, centre => 1, e => 1);
 my %anchor_is_ybot = (sw => 1, s => 1, se => 1);
-                       
+
 sub xy {
   my ($self, $x, $y, $colour) = @_;
   ### Image-Base-Tk-Canvas xy(): "$x,$y"
@@ -278,12 +278,23 @@ sub line {
 sub diamond {
   my ($self, $x1, $y1, $x2, $y2, $colour, $fill) = @_;
   ### Image-Base-Tk-Canvas diamond()
-  my $xh = ($x2 - $x1 + 1);
-  my $yh = ($y2 - $y1 + 1);
-  my $xeven = ! ($xh & 1);
-  my $yeven = ! ($yh & 1);
+
+  my $xh = ($x2 - $x1);
+  my $yh = ($y2 - $y1);
+  my $xeven = ($xh & 1);
+  my $yeven = ($yh & 1);
   $xh = int($xh / 2);
   $yh = int($yh / 2);
+  ### assert: $x1+$xh+$xeven == $x2-$xh
+  ### assert: $y1+$yh+$yeven == $y2-$yh
+
+  # my $xh = ($x2 - $x1 + 1);
+  # my $yh = ($y2 - $y1 + 1);
+  # my $xeven = ! ($xh & 1);
+  # my $yeven = ! ($yh & 1);
+  # $xh = int($xh / 2);
+  # $yh = int($yh / 2);
+
   my $method = ($fill ? 'createPolygon' : 'createLine');
   $self->{'-tkcanvas'}->$method ($x1+$xh,$y1,  # top centre
 
@@ -302,13 +313,14 @@ sub diamond {
                                  ($xeven ? ($x2-$xh,$y1) : ()),
                                  ($fill ? () : ($x1+$xh,$y1)),
 
-                                 -fill => $colour);
+                                 -fill => $colour,
+                                 ($fill ? (-outline => $colour) : ()));
 }
 
 1;
 __END__
 
-=for stopwords PNG filename Ryde Imager JPEG PNM GIF BMP png jpeg
+=for stopwords Image-Base-Tk filename Ryde EPS xfig Xlib WinPhoto eps
 
 =head1 NAME
 
