@@ -15,7 +15,6 @@ devel/tk-photo.pl
 devel/tk-winphoto.pl
 inc/my_pod2html
 inc/MyMakeMakerExtras.pm
-inc/MyModuleUtils_without.pm
 lib/Image/Base/Tk/Canvas.pm
 lib/Image/Base/Tk/Photo.pm
 Makefile.PL

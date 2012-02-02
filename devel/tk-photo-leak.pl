@@ -28,12 +28,13 @@ use Devel::Comments;
 {
   my $mw = MainWindow->new;
   my $photo;
-  $mw->repeat (500, sub {
+  $mw->repeat (500,
+               sub {
                  if ($photo) {
                    print "Not weakened away\n";
                    exit 0;
                  }
-                 $photo = $mw->Photo ("myname", 
+                 $photo = $mw->Photo ("myname",
                                       -width => 1000, -height => 1000);
                  $photo->delete;
                  Scalar::Util::weaken($photo);

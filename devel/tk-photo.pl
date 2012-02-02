@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2011 Kevin Ryde
+# Copyright 2011, 2012 Kevin Ryde
 
 # This file is part of Image-Base-Tk.
 #
@@ -21,10 +21,41 @@ use 5.004;
 use strict;
 use Tk;
 
+$ENV{'DISPLAY'} ||= ":0";
+
 # uncomment this to run the ### lines
 use Devel::Comments;
 
 
+
+{
+  # off-screen rectangle
+  require Image::Base::Tk::Photo;
+  my $mw = MainWindow->new;
+  my $image = Image::Base::Tk::Photo->new
+    (-for_widget => $mw,
+     -width => 10,
+     -height => 10,
+     -file_format => 'xpm');
+
+  $image->rectangle (0,0, 9,9, 'black', 1); # filled
+
+  $image->line (-5,4, 5,4, 'white');
+  $image->line (4,-5, 4,5, 'white');
+  $image->line (20,15,7,7, 'white');
+  $image->line (-100,-120,2,2, 'white');
+
+  # $image->xy (-10,-10, 'white'); # store
+  # $image->xy (9999,9999, 'white'); # store
+  # $image->xy (-10,-10);          # fetch
+  # $image->xy (9999,9999);        # fetch
+  # 
+  # $image->rectangle (-10,-10,6,6, 'white', 1); # filled
+  # $image->rectangle (8,8, 20,20, 'white', 1); # filled
+
+  $image->save('/dev/stdout');
+  exit 0;
+}
 
 {
   require Image::Base::Tk::Photo;

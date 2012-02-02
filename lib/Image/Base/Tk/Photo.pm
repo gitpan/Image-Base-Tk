@@ -1,4 +1,4 @@
-# Copyright 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Image-Base-Tk.
 #
@@ -31,13 +31,14 @@ use strict;
 use Carp;
 
 use vars '$VERSION', '@ISA';
-$VERSION = 2;
+$VERSION = 3;
 
 use Image::Base;
 @ISA = ('Image::Base');
 
 # uncomment this to run the ### lines
-#use Devel::Comments '###';
+#use Smart::Comments '###';
+
 
 sub new {
   my ($class, %params) = @_;
@@ -182,9 +183,17 @@ sub save_string {
     (-format => _format_use($self->get('-file_format')));
 }
 
+#------------------------------------------------------------------------------
+# drawing
+
 sub xy {
   my ($self, $x, $y, $colour) = @_;
   ### Image-Base-Tk-Photo xy() ...
+
+  # "-to" doesn't allow negative coordinates
+  if ($x < 0 || $y < 0) {
+    return undef;
+  }
 
   my $tkphoto = $self->{'-tkphoto'};
   if (@_ > 3) {
@@ -194,6 +203,12 @@ sub xy {
       $tkphoto->put ($colour, -to => $x,$y, $x+1,$y+1);
     }
   } else {
+    # get() and transparencyGet() don't allow x,y outside photo
+    if ($x >= $tkphoto->cget('-width')
+        || $y >= $tkphoto->cget('-height')) {
+      return undef;
+    }
+
     if ($tkphoto->transparencyGet ($x, $y)) {
       return 'None';
     } else {
@@ -205,12 +220,21 @@ sub xy {
 sub rectangle {
   my ($self, $x1, $y1, $x2, $y2, $colour, $fill) = @_;
   ### Image-Base-Tk-Photo rectangle() ...
+
   if ($fill && lc($colour) ne 'none') {
-    # filled rectangle with put()
-    $self->{'-tkphoto'}->put ($colour, -to => $x1,$y1, $x2+1,$y2+1);
+    ### filled rectangle with put() ...
+
+    if ($x2 >= 0 && $y2 >= 0) {
+      # "-to" doesn't allow negative coordinates
+      if ($x1 < 0) { $x1 = 0; }
+      if ($y1 < 0) { $y1 = 0; }
+
+      ### put: "$x1,$y1  ".($x2+1).",".($y2+1)
+      $self->{'-tkphoto'}->put ($colour, -to => $x1,$y1, $x2+1,$y2+1);
+    }
+
   } else {
-    # unfilled rectangle outlines with xy(),
-    # and any transparency with xy() (calling transparencySet())
+    ### unfilled or transparent rectangle with superclass lines ...
     shift->SUPER::rectangle(@_);
   }
 }
@@ -218,23 +242,40 @@ sub rectangle {
 sub line {
   my ($self, $x1, $y1, $x2, $y2, $colour) = @_;
   ### Image-Base-Tk-Photo line(): "$x1,$y1, $x2,$y2"
+
   if (lc($colour) eq 'none') {
     # any transparency by individual xy() pixels (with transparencySet())
     shift->SUPER::line(@_);
     return;
   }
+
   if ($x1 == $x2) {
     # vertical line by put() rectangle
+    if ($x1 < 0) {
+      ### vertical line all negative ...
+      return;
+    }
     if ($y1 > $y2) { ($y1,$y2) = ($y2,$y1) }
+
   } elsif ($y1 == $y2) {
     # horizontal line by put() rectangle
+    if ($y1 < 0) {
+      ### horizontal line all negative ...
+      return;
+    }
     if ($x1 > $x2) { ($x1,$x2) = ($x2,$x1) }
+
   } else {
-    # sloped line by individual xy() pixels
+    ### sloped line by individual xy() pixels ...
     shift->SUPER::line(@_);
     return;
   }
-  ### put: "$x1,$y1, ".($x2+1).",".($y2+1)
+
+  # "-to" doesn't allow negative coordinates
+  if ($x1 < 0) { $x1 = 0; }
+  if ($y1 < 0) { $y1 = 0; }
+
+  ### put(): "$x1,$y1, ".($x2+1).",".($y2+1)
   $self->{'-tkphoto'}->put ($colour, -to => $x1,$y1, $x2+1,$y2+1);
 }
 
@@ -273,44 +314,49 @@ C<Image::Base::Tk::Photo> is a subclass of C<Image::Base>,
 C<Image::Base::Tk::Photo> extends C<Image::Base> to create or update image
 files using the C<Tk::Photo> module from Perl-Tk.
 
-See L<Tk::Photo> for the supported file formats.  Perl-Tk 804 includes PNG,
-JPEG, XPM, XBM, GIF, BMP, and PPM/PGM, and the separate C<Tk::TIFF> has
-TIFF.
+See L<Tk::Photo> for the supported file formats.  Perl-Tk 804 includes
+
+   PNG, JPEG, XPM, XBM, GIF, BMP, PPM/PGM
+
+   TIFF    separate Tk::TIFF module
 
 A C<Tk::Photo> requires a C<Tk::MainWindow> and so an X display (etc),
-though there's no need to actually pop up the MainWindow.  Drawing
+though there's no need to actually display the MainWindow.  Drawing
 operations use the Photo pixel/rectangle C<put()>.
 
-For reference, in Perl-Tk to draw arbitrary graphics the choice is between a
-C<Tk::Canvas> with arcs etc, or a C<Tk::Photo> of pixels (set in as the
-C<-image> of a C<Tk::Label> or similar).  Is that right?  No drawing area
-widget?
+For reference, to draw arbitrary graphics in Perl-Tk the choice is between a
+C<Tk::Canvas> with arcs etc, or a C<Tk::Photo> of pixels which is set as the
+C<-image> of a C<Tk::Label> or similar.  Is that right?  No drawing area
+widget as such?
 
 =head2 Colours
 
 Colour names are anything recognised by L<Tk_GetColor(3tk)>, plus "None",
 
-    X server names      usually /etc/X11/rgb.txt
-    #RGB                hex
-    #RRGGBB             hex
-    #RRRGGGBBB          hex
-    #RRRRGGGGBBBB       hex
-    None                transparent
+    X server names     usually /etc/X11/rgb.txt
+    #RGB               hex
+    #RRGGBB            hex
+    #RRRGGGBBB         hex
+    #RRRRGGGGBBBB      hex
+    None               transparent
 
 The hex forms end up going to Xlib which means the shorter ones are padded
-with zeros, so "#FFF" is only "#F000F000F000", which is a light grey rather
-than white (see L<X(7)> "COLOR NAMES").
+with zeros, so "#FFF" is "#F000F000F000" which is a light grey rather than
+white.  See L<X(7)> "COLOR NAMES".
 
-"None" means a transparent pixel, applied with
-C<$tkphoto-E<gt>transparencySet()>.
+"None" means a transparent pixel, as per C<$tkphoto-E<gt>transparencySet()>.
 
 =head1 FUNCTIONS
+
+See L<Image::Base/FUNCTIONS> for the behaviour common to all Image-Base
+classes.
 
 =over 4
 
 =item C<$image = Image::Base::Tk::Photo-E<gt>new (key=E<gt>value,...)>
 
-Create and return a new image object.  It can act on a given C<Tk::Photo>,
+Create and return a new image object.  It can be given an existing
+C<Tk::Photo>,
 
     $image = Image::Base::Tk::Photo->new (-tkphoto => $tkphoto);
 
@@ -320,8 +366,8 @@ C<Tk::MainWindow> is suitable.
 
     $image = Image::Base::Tk::Photo->new (-for_widget => $widget);
 
-An C<-width> and C<-height> size can be given.  Zero or omitted gives the
-usual auto-sizing of C<Tk::Photo>.
+C<-width> and C<-height> size can be given.  Zero or omitted gives the usual
+auto-sizing of C<Tk::Photo>.
 
     $image = Image::Base::Tk::Photo->new (-for_widget => $widget,
                                           -width => 200,
@@ -348,12 +394,12 @@ How to clone a C<Tk::Photo>?
 
 =item C<$image-E<gt>load ($filename)>
 
-Read the C<-file>, or set C<-file> to C<$filename> and then read.
+Read the current C<-file>, or set C<-file> to C<$filename> and then read.
 
-The file format is recognised automatically by C<Tk::Photo> from among the
-formats registered.  Some formats are builtin, but for PNG, JPEG and TIFF
-the corresponding format modules C<Tk::PNG>, C<Tk::JPEG> or C<Tk::TIFF> must
-be used first.  For example,
+The file format is recognised automatically by C<Tk::Photo> from the formats
+registered.  Some formats are builtin, but for PNG, JPEG and TIFF the
+corresponding format modules C<Tk::PNG>, C<Tk::JPEG> or C<Tk::TIFF> must be
+used first.  For example,
 
     use Tk::PNG;
     $image->load ('/my/filename.png');
@@ -366,7 +412,7 @@ Save to C<-file>, or with a C<$filename> argument set C<-file> then save to
 that.
 
 The saved file format is taken from C<-file_format> (see L</ATTRIBUTES>
-below) if that was set from a C<load()> or explicit C<set()>.
+below) if that was set, either from a C<load()> or explicit C<set()>.
 
 For convenience, when saving PNG, JPEG and TIFF the necessary C<Tk::PNG>,
 C<Tk::JPEG> or C<Tk::TIFF> module is loaded automatically.  Any other
@@ -397,8 +443,8 @@ never set.
 After C<load> the C<-file_format> is the format read.  Setting
 C<-file_format> can change the format for a subsequent C<save()>.
 
-There's no attempt to check or validate the C<-file_format> value, since
-it's possible to add new formats to Tk::Photo at run time.  Expect C<save()> to
+There's no attempt to check or validate the C<-file_format> value since it's
+possible to add new formats to Tk::Photo at run time.  Expect C<save()> to
 croak if the format is unknown.
 
 =back
@@ -415,7 +461,7 @@ http://user42.tuxfamily.org/image-base-tk/index.html
 
 =head1 LICENSE
 
-Image-Base-Tk is Copyright 2010, 2011 Kevin Ryde
+Image-Base-Tk is Copyright 2010, 2011, 2012 Kevin Ryde
 
 Image-Base-Tk is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

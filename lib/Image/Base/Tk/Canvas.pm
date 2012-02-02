@@ -1,4 +1,4 @@
-# Copyright 2010, 2011 Kevin Ryde
+# Copyright 2010, 2011, 2012 Kevin Ryde
 
 # This file is part of Image-Base-Tk.
 #
@@ -30,7 +30,7 @@ use vars '$VERSION', '@ISA';
 use Image::Base;
 @ISA = ('Image::Base');
 
-$VERSION = 2;
+$VERSION = 3;
 
 # uncomment this to run the ### lines
 #use Devel::Comments '###';
@@ -157,6 +157,8 @@ sub save_string {
   return $self->{'-tkcanvas'}->postscript;
 }
 
+#------------------------------------------------------------------------------
+
 my %anchor_is_xcentre = (n => 1, centre => 1, s => 1);
 my %anchor_is_xright = (ne => 1, e => 1, se => 1);
 my %anchor_is_ycentre = (w => 1, centre => 1, e => 1);
@@ -237,7 +239,7 @@ sub xy {
       return sprintf ('#%02X%02X%02X', $photo->get ($x, $y));  # r,g,b
     }
     # if ($type eq 'image') {
-    #   # copy Tk::Image to  Tk::Photo to get its pixels, maybe ...
+    #   # copy Tk::Image to Tk::Photo to get its pixels, maybe ...
     # }
     # if ($type eq 'grid') {
     #   # but never occurs as an "overlapping", or something ...
@@ -252,14 +254,16 @@ sub xy {
 # lower and right edges are excluded when filled, per X11 style
 sub rectangle {
   my ($self, $x1, $y1, $x2, $y2, $colour, $fill) = @_;
-  ### Image-Base-Tk-Canvas rectangle()
+  ### Image-Base-Tk-Canvas rectangle() ...
+
   $self->{'-tkcanvas'}->createRectangle($x1,$y1, $x2,$y2,
                                         -outline => $colour,
                                         ($fill ? (-fill => $colour) : ()));
 }
 sub ellipse {
   my ($self, $x1, $y1, $x2, $y2, $colour, $fill) = @_;
-  ### Image-Base-Tk-Canvas ellipse()
+  ### Image-Base-Tk-Canvas ellipse() ...
+
   # seems that a 1xN or Nx1 pixel unfilled doesn't draw anything, so go filled
   $fill ||= ($x1 == $x2 || $y1 == $y2);
   $self->{'-tkcanvas'}->createOval($x1,$y1, $x2,$y2,
@@ -269,6 +273,7 @@ sub ellipse {
 
 sub line {
   my ($self, $x1, $y1, $x2, $y2, $colour) = @_;
+
   # must have 'projecting' to ensure the bottom right pixel drawn, per X style
   $self->{'-tkcanvas'}->createLine($x1,$y1, $x2,$y2,
                                    -fill => $colour,
@@ -353,7 +358,7 @@ C<Image::Base::Tk::Canvas> extends C<Image::Base> to add items to a
 C<Tk::Canvas> widget.
 
 There's no file reading, but encapsulated postscript (EPS) can be written,
-or "fig" format (for the xfig program) if you have C<Tk::CanvasFig>.
+or "fig" format (as for the C<xfig> program) if you have C<Tk::CanvasFig>.
 
 C<Tk::Canvas> has many more features than available here, but this module is
 a cute way to point some C<Image::Base> code at a canvas.  There's no limit
@@ -372,10 +377,13 @@ Colour names are anything recognised by L<Tk_GetColor(3tk)>,
     #RRRRGGGGBBBB       hex
 
 The hex forms end up going to Xlib which means the shorter ones are padded
-with zeros, so "#FFF" is only "#F000F000F000", which is a light grey rather
+with zeros, so "#FFF" is only "#F000F000F000" which is a light grey rather
 than white (see L<X(7)> "COLOR NAMES").
 
 =head1 FUNCTIONS
+
+See L<Image::Base/FUNCTIONS> for the behaviour common to all Image-Base
+classes.
 
 =over 4
 
@@ -403,8 +411,8 @@ C<$x,$y> and picking out its colour.  This works well enough for the item
 types added by this module but might not work for others -- in particular an
 item's outline is not distinguished from its fill interior.  "window" items
 are examined with a C<Tk::WinPhoto> and may be a bit slow, and could even
-induce an Xlib error if the window is off the edge of the screen (hope
-WinPhoto might avoid that for the benefit of all WinPhoto uses).  "bitmap"
+induce an Xlib error if the window is off the edge of the screen (would like
+WinPhoto to avoid that for the benefit of all WinPhoto uses).  "bitmap"
 items are not read at all yet.
 
 =item C<$image-E<gt>diamond ($x0, $y0, $x1, $y1, $colour)>
@@ -433,12 +441,12 @@ then save to that.
 
 C<-file_format> below controls the output format.  The default "eps" is
 encapsulated postscript using C<$tkcanvas-E<gt>postscript()>.  It might be
-limited to the items currently visible in the window.  The C<postscript()>
+limited to items currently visible in the window.  The C<postscript()>
 method has various options not available with this C<save()> and can of
 course be used directly.
 
 Format "fig" uses C<$tkcanvas-E<gt>fig()> from C<Tk::CanvasFig> if
-available, to produce fig files for the xfig program.
+available, to produce fig files for the C<xfig> program.
 
 =back
 
@@ -480,7 +488,7 @@ http://user42.tuxfamily.org/image-base-tk/index.html
 
 =head1 LICENSE
 
-Image-Base-Tk is Copyright 2010, 2011 Kevin Ryde
+Image-Base-Tk is Copyright 2010, 2011, 2012 Kevin Ryde
 
 Image-Base-Tk is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by the

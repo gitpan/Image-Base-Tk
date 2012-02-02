@@ -28,43 +28,12 @@ use Devel::Comments;
 
 
 {
-  require Image::Base::Tk::Canvas;
-  my $mw = MainWindow->new;
-  my $image = Image::Base::Tk::Canvas->new
-    (-for_widget => $mw,
-     -width => 50,
-     -height => 20,
-     -file_format => 'xpm');
-
-  $image->rectangle (0,0, 49,19, 'black');
-
-  $image->diamond (1,1,6,6, 'white');
-  $image->diamond (11,1,16,6, 'white', 1);
-  $image->diamond (1,10,7,16, 'white');
-  $image->diamond (11,10,17,16, 'white', 1);
-
-  require Tk::WinPhoto;
-  my $canvas = $image->get('-tkcanvas');
-  $canvas->update;
-  my $photo = $canvas->Photo (-format => 'window',
-                              -data => oct($canvas->id));
-  require Image::Base::Tk::Photo;
-  my $pimage = Image::Base::Tk::Photo->new
-    (-tkphoto => $photo,
-     -width => 50,
-     -height => 20);
-  $photo->write ('/dev/stdout', -format => 'xpm');
-  exit 0;
-}
-
-
-{
   my $mw = MainWindow->new;
   $mw->mwmDecorations (-title => 0,
                        -border => 0,
                        -menu => 0,
                        -maximize => 0);
-  # ### decor: $mw->mwmDecorations
+  ### decor: [$mw->mwmDecorations]
   ### mw id: $mw->id
   $mw->configure(-borderwidth => 0);
 
@@ -112,7 +81,7 @@ use Devel::Comments;
   # ### @ret
 
   #$image->ellipse (5,7, 5,7, 'white', 1);
-   $image->ellipse (2,2,8,8, 'white', 0);
+  $image->ellipse (2,2,8,8, 'white', 0);
 
   my $label = $canvas->Label(-text=>'E');
   # -width => 10, -height => 10
@@ -145,14 +114,14 @@ use Devel::Comments;
   #      -width => 30,
   #      -height => 30);
   #   $photo->write ('/dev/stdout', -format => 'xpm');
-  # 
+  #
   #   ### pimage size: $pimage->get('-width','-height')
   #   MyTestImageBase::dump_image($pimage);
   # }
 
 
-  MyTestImageBase::dump_image($image);
-  exit 0;
+  # MyTestImageBase::dump_image($image);
+  # exit 0;
 
   # $canvas->delete($canvas->find('all'));
   # ### xy: $image->xy (5,7)
@@ -160,6 +129,38 @@ use Devel::Comments;
   MainLoop;
   exit 0;
 }
+
+{
+  require Image::Base::Tk::Canvas;
+  my $mw = MainWindow->new;
+  my $image = Image::Base::Tk::Canvas->new
+    (-for_widget => $mw,
+     -width => 50,
+     -height => 20,
+     -file_format => 'xpm');
+
+  $image->rectangle (0,0, 49,19, 'black');
+
+  $image->diamond (1,1,6,6, 'white');
+  $image->diamond (11,1,16,6, 'white', 1);
+  $image->diamond (1,10,7,16, 'white');
+  $image->diamond (11,10,17,16, 'white', 1);
+
+  require Tk::WinPhoto;
+  my $canvas = $image->get('-tkcanvas');
+  $canvas->update;
+  my $photo = $canvas->Photo (-format => 'window',
+                              -data => oct($canvas->id));
+  require Image::Base::Tk::Photo;
+  my $pimage = Image::Base::Tk::Photo->new
+    (-tkphoto => $photo,
+     -width => 50,
+     -height => 20);
+  $photo->write ('/dev/stdout', -format => 'xpm');
+  exit 0;
+}
+
+
 {
   # if area requested is in fact partly outside the screen then badmatch
   require X11::Protocol;

@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright 2011 Kevin Ryde
+# Copyright 2011, 2012 Kevin Ryde
 
 # This file is part of Image-Base-Tk.
 #
@@ -35,7 +35,7 @@ my $mw;
 eval { $mw = MainWindow->new }
   or plan skip_all => "due to no display -- $@";
 
-plan tests => 1930;
+plan tests => 1936;
 
 sub my_bounding_box {
   my ($image, $x1,$y1, $x2,$y2, $black, $white) = @_;
@@ -135,7 +135,7 @@ sub my_bounding_box_and_sides {
 # VERSION
 
 {
-  my $want_version = 2;
+  my $want_version = 3;
   is ($Image::Base::Tk::Canvas::VERSION, $want_version, 'VERSION variable');
   is (Image::Base::Tk::Canvas->VERSION,  $want_version, 'VERSION class method');
 
@@ -253,7 +253,8 @@ my $test_filename = 'testfile.tmp';
                                   if ($canvas->find('all')) {
                                     die "oops, canvas not cleared";
                                   }
-                                });
+                                },
+                                big_fetch_expect => 'black');
 }
 
 unlink $test_filename;

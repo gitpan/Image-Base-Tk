@@ -15,48 +15,47 @@ not run its Makefile.PL or Build.PL.
 Hash: SHA1
 
 SHA1 842745cb706f8f2126506f544492f7a80dbe29b3 COPYING
-SHA1 56f843684335fd2491241a545a099f38d564e392 Changes
-SHA1 9700f8d36fd196e2ca04e66e40df7e770a12ea2f MANIFEST
-SHA1 1d745ef4cc154d3b13bfee6d1048ac4135fc1aa7 MANIFEST.SKIP
-SHA1 1d9a73323d8ebffd3c4d93dd2550ef56bd9b4c9f META.yml
-SHA1 f75e7222e1418803f5bb05280b4bb44cad05fa02 Makefile.PL
-SHA1 f1e41974af9566efa34d85738947193e437be619 debian/changelog
+SHA1 75c920ccb7f806a744955cebeedbd0fbd2f77afc Changes
+SHA1 1f1d4b5d08054b7064b82d843e47cf9de4468a46 MANIFEST
+SHA1 6e3dfa4a933a1a5da6c934cca324fc40495b2f5d MANIFEST.SKIP
+SHA1 339e85f614c8404ba82f680cac39753cbc03fa1c META.yml
+SHA1 75ceaf8791ad0d6e3f15313b4ca45c15ef28e546 Makefile.PL
+SHA1 a8dbe815057a7249e624be7a31c0821402e47d7c debian/changelog
 SHA1 ac3478d69a3c81fa62e60f5c3696165a4e5e6ac4 debian/compat
 SHA1 55420e49d78dbe5485c7b8afd08a4a0b51ae9e84 debian/control
-SHA1 e08062caaceaa3f11cc92729e3a6c505ad5008b1 debian/copyright
+SHA1 b822069cea0b819c047d002cc39d7929b31afbda debian/copyright
 SHA1 d7a4211957ac9a577ac022d6aaede1bbb8430d45 debian/rules
 SHA1 61652cd1568dcf2614df833eba241755eee34e89 debian/source/format
 SHA1 54f91834db18d5cce10e8c07443948f514aca406 debian/watch
 SHA1 a89b3435670241800eae049fcb7348ea0ddb29c7 devel/tk-canvas-eps.pl
 SHA1 81cfb3ef0096817bf8d3876d36499f23a575c3d1 devel/tk-canvas-fig.pl
-SHA1 bc8226cd994b4ee97ff6e06580424b020cad40c2 devel/tk-canvas.pl
-SHA1 88426e241f38d173e37e1a7a95ecade31d18047b devel/tk-photo-leak.pl
-SHA1 ee52c292e15fa136f50b5a05cdc876fd200e0330 devel/tk-photo.pl
+SHA1 e13094c731dd9f574d76ec57589e809fb8f3d5a7 devel/tk-canvas.pl
+SHA1 86612aa5382ee1aae3b84d8335ed656111fb832b devel/tk-photo-leak.pl
+SHA1 5217dd387d139d4b2f03f8d20bf1ad14be9863cb devel/tk-photo.pl
 SHA1 9541a4db39a8841641211480116fc9a701270012 devel/tk-winphoto.pl
-SHA1 e49e071a43390ddb233272dbf39fbaf2947b1cd6 inc/MyMakeMakerExtras.pm
-SHA1 78777cef755a3896e260ef4c565338dcb0e479f6 inc/MyModuleUtils_without.pm
+SHA1 ce6e51f801a3105a8f1b204b311aeb147c37058e inc/MyMakeMakerExtras.pm
 SHA1 7a988b2aa7ed09f1cb9029a1ef3f0e2139dca0cf inc/my_pod2html
-SHA1 27a3942c6b4c2d96497ccd2249784d73a0f122f3 lib/Image/Base/Tk/Canvas.pm
-SHA1 96b680a5146e5a80038e883fd7c236c288f2a497 lib/Image/Base/Tk/Photo.pm
+SHA1 9255aefd0d904016e991d2dc8ce8cb221533de5d lib/Image/Base/Tk/Canvas.pm
+SHA1 362e310f84d8b0eb704f168aae18480973b82bf8 lib/Image/Base/Tk/Photo.pm
 SHA1 e4ec32a7370628b14ea2450d2333d492f468e23e t/Canvas-fig.t
 SHA1 06320e205f56eba130057080a1995597eca3005b t/Canvas-use.t
-SHA1 e0d6fb1daeaa9f6447300f0211e9adad94c97523 t/Canvas.t
-SHA1 016f6f5865d54130d50f400fb630091bd1a6c76f t/MyTestHelpers.pm
-SHA1 2844313f42e403c3f519e5a22c01cb3c92ca0454 t/MyTestImageBase.pm
+SHA1 ff6e15f20a07d4a101579d6adf126bde177d8ee6 t/Canvas.t
+SHA1 969664973af9de9d898008e3ef280892b8d63244 t/MyTestHelpers.pm
+SHA1 f0fb4938250b2c5be37363f238c5130fd583df84 t/MyTestImageBase.pm
 SHA1 3ceae5bfa6ebc5fd18d56216257fdd2a159e6192 t/Photo-use.t
-SHA1 a7c4f7784e0a314ac58cf5a2a72edf868428efa9 t/Photo.t
-SHA1 0279c9310ec528d10a2a14e602bf98f1c776cce1 xt/0-META-read.t
-SHA1 219395eb91b03829e6f14db4ebd57d88ea972e61 xt/0-Test-ConsistentVersion.t
-SHA1 8a5e0f34131de34e584fbb1939c191a152566155 xt/0-Test-DistManifest.t
-SHA1 cc04a5fe5d8b8b38bfd56453d5d2686c8ea58783 xt/0-Test-Pod.t
-SHA1 8cc52e23427a82cfef5802bf512b13c65de2687a xt/0-Test-Synopsis.t
-SHA1 194f76a77d4b022a8b707932d3a45be310400360 xt/0-Test-YAML-Meta.t
-SHA1 c03e001ac27b9cb5954174852eb3087d758334d2 xt/0-file-is-part-of.t
+SHA1 b77e987bd788dc7b662a68b2850fb56206258e66 t/Photo.t
+SHA1 811028548aa4b360b5086d1af3150f9dde348aa6 xt/0-META-read.t
+SHA1 c9e7a47e1f397eb5f46d7e4ef21754d9df76e36e xt/0-Test-ConsistentVersion.t
+SHA1 d9e7f38a8dcfdb76c56951e4214be8eeda2e2289 xt/0-Test-DistManifest.t
+SHA1 9496e4a2a2734c7093ab6961900dd7a55800976e xt/0-Test-Pod.t
+SHA1 083242d959c1a9242c874982e4585872a95bec93 xt/0-Test-Synopsis.t
+SHA1 ec454b1b524d2d0b35e5a7d8292ad13d82becab5 xt/0-Test-YAML-Meta.t
+SHA1 d1d6dc2ff925e7ba5c014ce1361e6d097d061f2a xt/0-file-is-part-of.t
 SHA1 daba2840c7f128371d42516619a0e04fee2f5ff4 xt/0-no-debug-left-on.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.11 (GNU/Linux)
 
-iD8DBQFOVtazLFMCIV9q3ToRAixjAJ9++YeQZgjCJLKZvODPKR7vjSfu0wCfYlxm
-EZlAo/1jV0QiYbpjoV9iSXw=
-=48oC
+iD8DBQFPKu7WLFMCIV9q3ToRAganAJ9/ZqQRFWUjM+vfRQm6UpRf0r4LMQCgpfWm
+/sH8tIdjZgPlBkuK5//LyV8=
+=nbP6
 -----END PGP SIGNATURE-----
